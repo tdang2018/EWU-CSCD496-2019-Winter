@@ -25,7 +25,7 @@ namespace SecretSanta.Domain.Tests.Services
             {
                 Title = "My First Gift",
                 OrderOfImportance = 1,
-                URL = "www.ewu.edu",
+                Url = "www.ewu.edu",
                 Description = "My first description",
                 User = user,
 
@@ -85,12 +85,18 @@ namespace SecretSanta.Domain.Tests.Services
                 UserService service = new UserService(context);
                 var myUser = CreateUser();
 
-                var persistedUser = service.UpdateUser(myUser);
+                service.AddUser(myUser);
+                myUser.FirstName = "Update first name";
+                service.UpdateUser(myUser);
+            }
 
-                Assert.AreNotEqual(0, persistedUser.Id);
+            using (var context = new ApplicationDbContext(Options))
+            {
+                UserService service = new UserService(context);
+                var fecthedUser = service.Find(1);
+                Assert.AreEqual("Update first name", fecthedUser.FirstName);
             }
         }
-
 
     }
 }
