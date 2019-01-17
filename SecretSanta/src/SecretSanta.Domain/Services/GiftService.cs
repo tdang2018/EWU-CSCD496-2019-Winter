@@ -1,6 +1,8 @@
-﻿using SecretSanta.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SecretSanta.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SecretSanta.Domain.Services
@@ -26,6 +28,19 @@ namespace SecretSanta.Domain.Services
         {
             DbContext.Gifts.Update(gift);
 
+            DbContext.SaveChanges();
+
+            return gift;
+        }
+        public Gift Find(int id)
+        {
+            return DbContext.Gifts.Include(gift => gift.User)
+                .SingleOrDefault(gift => gift.Id == id);
+        }
+
+        public Gift RemoveGift(Gift gift)
+        {
+            DbContext.Gifts.Remove(gift);
             DbContext.SaveChanges();
 
             return gift;
