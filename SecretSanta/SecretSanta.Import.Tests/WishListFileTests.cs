@@ -5,65 +5,87 @@ namespace SecretSanta.Import.Tests
     [TestClass]
     public class WishListFileTests
     {
+        public string[] Lines;
+        public WishListFile WishListFile=null;
+        public string TempFileName;
 
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            WishListFile = new WishListFile();
+            //use to create test file
+            TempFileName = WishListFile.CreateTempFile();
+            //Lines = WishListFile.OpenFile("wishlistuser.txt");           
+            Lines = WishListFile.OpenFile(TempFileName);
+        }
+       
         [TestMethod]
         public void CheckHeader_FirstNameSpaceLastName_ReturnsTrue()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(true, wishListFile.IsValidHeader("Name: Tuan Dang"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Tuan Dang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(true, WishListFile.IsValidHeader(Lines[0]));
         }
+
         [TestMethod]
         public void CheckHeader_EmptyString_ReturnsFalse()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsValidHeader(""));
+            WishListFile.InsertLineToTempFile(TempFileName, "");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(""));
         }
+
         [TestMethod]
         public void CheckHeader_Null_ReturnsFalse()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsValidHeader(null));
+            WishListFile.InsertLineToTempFile(TempFileName, "");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(null));
         }
+
         [TestMethod]
         public void CheckHeader_ValidFirstLast_ReturnsTrue()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsValidHeader("Name: Grant Woods"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Grant Woods");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
         }
 
         [TestMethod]
         public void CheckHeader_FirstNameCommmaLastName_ReturnsTrue()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(true, wishListFile.IsValidHeader("Name: Tuan, Dang"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Tuan, Dang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(true, WishListFile.IsValidHeader(Lines[0]));
         }
 
         [TestMethod]
         public void CheckHeader_FirstNameSpaceLastName_ReturnsFalse()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsValidHeader("Name: TuanDang"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: TuanDang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
         }
 
         [TestMethod]
         public void CheckHeader_FirstNameCommmaLastName_ReturnsFalse()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsValidHeader("Name: Tuan,,Dang"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Tuan,,Dang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
         }
         
         [TestMethod]
         public void CheckFile_Exists_ReturnsTrue()
         {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(true, wishListFile.IsFileExists("C:\\CSCD330\\WebServer.java"));
+            
+            Assert.AreEqual<bool>(true, WishListFile.IsFileExists("C:\\CSCD330\\WebServer.java"));
         }
 
         [TestMethod]
         public void CheckFile_NotExists_ReturnsFalse()
-        {
-            WishListFile wishListFile = new WishListFile();
-            Assert.AreEqual(false, wishListFile.IsFileExists("C:\\CSCD330\\WeServer.java"));
+        {            
+            Assert.AreEqual<bool>(false, WishListFile.IsFileExists("C:\\CSCD330\\WeServer.java"));
         }
     }
 }
