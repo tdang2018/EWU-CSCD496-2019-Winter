@@ -74,18 +74,20 @@ namespace SecretSanta.Import.Tests
             Lines = WishListFile.OpenFile(TempFileName);
             Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
         }
-        
         [TestMethod]
-        public void CheckFile_Exists_ReturnsTrue()
+        public void CheckHeader_FirstNamePlusLastName_ReturnsFalse()
         {
-            
-            Assert.AreEqual<bool>(true, WishListFile.IsFileExists("C:\\CSCD330\\WebServer.java"));
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Tuan+Dang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
+        }
+        [TestMethod]
+        public void CheckHeader_FirstNameMinusLastName_ReturnsFalse()
+        {
+            WishListFile.InsertLineToTempFile(TempFileName, "Name: Tuan-Dang");
+            Lines = WishListFile.OpenFile(TempFileName);
+            Assert.AreEqual<bool>(false, WishListFile.IsValidHeader(Lines[0]));
         }
 
-        [TestMethod]
-        public void CheckFile_NotExists_ReturnsFalse()
-        {            
-            Assert.AreEqual<bool>(false, WishListFile.IsFileExists("C:\\CSCD330\\WeServer.java"));
-        }
     }
 }
