@@ -5,32 +5,32 @@ using SecretSanta.Domain.Models;
 
 namespace SecretSanta.Domain.Services
 {
-    public class UserService
+    public class GroupService
     {
         private ApplicationDbContext DbContext { get; }
 
-        public UserService(ApplicationDbContext dbContext)
+        public GroupService(ApplicationDbContext dbContext)
         {
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public User AddUser(User user)
+        public Group AddGroup(Group Group)
         {
-            DbContext.Users.Add(user);
+            DbContext.Groups.Add(Group);
             DbContext.SaveChanges();
-            return user;
+            return Group;
         }
 
-        public User UpdateUser(User user)
+        public Group UpdateGroup(Group Group)
         {
-            DbContext.Users.Update(user);
+            DbContext.Groups.Update(Group);
             DbContext.SaveChanges();
-            return user;
+            return Group;
         }
 
-        public List<User> FetchAll()
+        public List<Group> FetchAll()
         {
-            return DbContext.Users.ToList();
+            return DbContext.Groups.ToList();
         }
     }
 }
