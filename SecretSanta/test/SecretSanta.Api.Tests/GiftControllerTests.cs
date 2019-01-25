@@ -13,7 +13,7 @@ namespace SecretSanta.Api.Tests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void GiftControl_RequiresGiftService()
+        public void GiftController_RequiresGiftService()
         {
             new GiftController(null);
         }
