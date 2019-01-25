@@ -14,18 +14,18 @@ namespace SecretSanta.Domain.Services
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public Group AddGroup(Group Group)
+        public Group AddGroup(Group @group)
         {
-            DbContext.Groups.Add(Group);
+            DbContext.Groups.Add(@group);
             DbContext.SaveChanges();
-            return Group;
+            return @group;
         }
 
-        public Group UpdateGroup(Group Group)
+        public Group UpdateGroup(Group @group)
         {
-            DbContext.Groups.Update(Group);
+            DbContext.Groups.Update(@group);
             DbContext.SaveChanges();
-            return Group;
+            return @group;
         }
 
         public List<Group> FetchAll()
