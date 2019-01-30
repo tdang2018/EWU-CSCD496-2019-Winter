@@ -89,5 +89,63 @@ namespace SecretSanta.Api.Tests
             Assert.AreEqual(4, testService.AddGiftToUser_UserId);
             Assert.AreEqual(giftDto.Id, testService.AddGiftToUser_Gift.Id);
         }
+
+        [TestMethod]
+        public void UpdateGiftToUser_RequiresGift()
+        {
+            var testService = new TestableGiftService();
+            var controller = new GiftController(testService);
+
+            ActionResult result = controller.AddGiftToUser(null, 4);
+
+            Assert.IsTrue(result is BadRequestResult);
+            //This check ensures that the controller does not AddGitToUser on the service
+            Assert.AreEqual(0, testService.UpdateGiftToUser_UserId);
+        }
+
+        [TestMethod]
+        public void UpdateGiftToUser_InvokesService()
+        {
+            var testService = new TestableGiftService();
+            var controller = new GiftController(testService);
+            var giftDto = new DTO.Gift { Id = 42 };
+
+            ActionResult result = controller.UpdateGiftToUser(giftDto, 4);
+
+            OkResult okResult = result as OkResult;
+
+            Assert.IsNotNull(result, "Result was not a 200");
+            Assert.AreEqual(4, testService.UpdateGiftToUser_UserId);
+            Assert.AreEqual(giftDto.Id, testService.UpdateGiftToUser_Gift.Id);
+        }
+
+        [TestMethod]
+        public void RemoveGift_RequiresGift()
+        {
+            var testService = new TestableGiftService();
+            var controller = new GiftController(testService);
+
+            ActionResult result = controller.RemoveGift(null);
+
+            Assert.IsTrue(result is BadRequestResult);
+           
+        }
+
+        [TestMethod]
+        public void RemoveGift_InvokesService()
+        {
+            var testService = new TestableGiftService();
+            var controller = new GiftController(testService);
+            var giftDto = new DTO.Gift { Id = 42 };
+
+            ActionResult result = controller.RemoveGift(giftDto);
+
+            OkResult okResult = result as OkResult;
+
+            Assert.IsNotNull(result, "Result was not a 200");
+            
+            Assert.AreEqual(giftDto.Id, testService.RemoveGift_Gift.Id);
+        }
+
     }
 }
