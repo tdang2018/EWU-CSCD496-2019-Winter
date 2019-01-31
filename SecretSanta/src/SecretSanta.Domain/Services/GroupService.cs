@@ -32,5 +32,15 @@ namespace SecretSanta.Domain.Services
         {
             return DbContext.Groups.ToList();
         }
+
+        public List<User> GetUsers(int groupId)
+        {
+            return DbContext.Groups
+                .Where(g => g.Id == groupId)
+                .SelectMany(g => g.GroupUsers)
+                .Select(gu => gu.User)
+                .ToList();
+
+        }
     }
 }

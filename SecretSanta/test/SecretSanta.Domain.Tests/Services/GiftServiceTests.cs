@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecretSanta.Domain.Models;
 using SecretSanta.Domain.Services;
+using System;
 
 namespace SecretSanta.Domain.Tests.Services
 {
@@ -8,7 +9,13 @@ namespace SecretSanta.Domain.Tests.Services
     public class GiftServiceTests : DatabaseServiceTests
     {
         [TestMethod]
-        public void AddGift()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GiftService_RequiresDbContext()
+        {
+            new GiftService(null);
+        }
+        [TestMethod]
+        public void AddGiftToUser_PersistsGift()
         {
             using (var context = new ApplicationDbContext(Options))
             {
@@ -36,7 +43,7 @@ namespace SecretSanta.Domain.Tests.Services
         }
 
         [TestMethod]
-        public void UpdateGift()
+        public void AddGiftToUser_UpdatesExistingGift()
         {
             using (var context = new ApplicationDbContext(Options))
             {
