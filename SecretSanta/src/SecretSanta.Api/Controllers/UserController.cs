@@ -7,6 +7,8 @@ using SecretSanta.Domain.Services;
 
 namespace SecretSanta.Api.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _UserService;
