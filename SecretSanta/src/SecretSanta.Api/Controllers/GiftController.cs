@@ -51,7 +51,7 @@ namespace SecretSanta.Api.Controllers
 
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{userId}")]
         public ActionResult UpdateGiftToUser(DTO.Gift gift, int userId)
         {
             if (userId <= 0)
@@ -69,7 +69,7 @@ namespace SecretSanta.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public ActionResult RemoveGift(DTO.Gift gift)
         {
             if (gift == null)
