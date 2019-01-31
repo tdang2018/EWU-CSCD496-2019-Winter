@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SecretSanta.Domain.Models;
+using SecretSanta.Domain.Services.Interfaces;
 
 namespace SecretSanta.Domain.Services
 {
