@@ -111,6 +111,7 @@ namespace SecretSanta.Api.Tests.Controllers
                 Name = "Group"
             };
             var service = new Mock<IGroupService>();
+            service.Setup(x => x.Find(2)).Returns(new Group { Id = 2, Name = "My Group" }).Verifiable();
             service.Setup(x => x.UpdateGroup(It.Is<Group>(g =>
                     g.Name == group.Name)))
                 .Returns(new Domain.Models.Group
