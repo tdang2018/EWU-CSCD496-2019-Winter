@@ -15,6 +15,11 @@ namespace SecretSanta.Domain.Services
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
+        public User Find(int id)
+        {
+            return DbContext.Users.Find(id);
+        }
+
         public User AddUser(User user)
         {
             DbContext.Users.Add(user);

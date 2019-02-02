@@ -11,7 +11,7 @@ using SecretSanta.Domain.Services.Interfaces;
 namespace SecretSanta.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private IUserService UserService { get; }
 
@@ -43,7 +43,16 @@ namespace SecretSanta.Api.Controllers
                 return BadRequest();
             }
 
-            var persistedUser = UserService.UpdateUser(UserInputViewModel.ToModel(userViewModel));
+            var foundUser = UserService.Find(id);
+            if (foundUser == null)
+            {
+                return NotFound();
+            }
+
+            foundUser.FirstName = userViewModel.FirstName;
+            foundUser.LastName = userViewModel.LastName;
+
+            var persistedUser = UserService.UpdateUser(foundUser);
 
             return Ok(UserViewModel.ToViewModel(persistedUser));
         }

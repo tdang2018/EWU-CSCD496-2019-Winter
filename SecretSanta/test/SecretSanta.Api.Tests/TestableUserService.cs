@@ -8,6 +8,10 @@ namespace SecretSanta.Api.Tests
 {
     public class TestableUserService : IUserService
     {
+        public User Find(int id)
+        {
+            throw new NotImplementedException();
+        }
         public User AddUser(User user)
         {
             throw new NotImplementedException();

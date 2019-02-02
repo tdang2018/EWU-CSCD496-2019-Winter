@@ -7,6 +7,7 @@ namespace SecretSanta.Domain.Services.Interfaces
 {
     public interface IUserService
     {
+        User Find(int id);
         User AddUser(User user);
 
         User UpdateUser(User user);
