@@ -10,11 +10,11 @@ using SecretSanta.Domain.Services.Interfaces;
 namespace SecretSanta.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class GroupUserController : ControllerBase
+    public class GroupUsersController : ControllerBase
     {
         private IGroupService GroupService { get; }
 
-        public GroupUserController(IGroupService groupService)
+        public GroupUsersController(IGroupService groupService)
         {
             GroupService = groupService;
         }

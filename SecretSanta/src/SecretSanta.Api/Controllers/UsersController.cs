@@ -14,81 +14,82 @@ namespace SecretSanta.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private IGroupService GroupService { get; }
+        private IUserService UserService { get; }
         private IMapper Mapper { get; }
 
-        public GroupController(IGroupService groupService, IMapper mapper)
+        public UsersController(IUserService userService, IMapper mapper)
         {
-            GroupService = groupService;
+            UserService = userService;
             Mapper = mapper;
         }
 
-        // GET api/group
+        // GET api/User
         [HttpGet]
-        [Produces(typeof(ICollection<GroupViewModel>))]
+        [Produces(typeof(ICollection<UserViewModel>))]
         public IActionResult Get()
         {
-            return Ok(GroupService.FetchAll().Select(x => Mapper.Map<GroupViewModel>(x)));
+            return Ok(UserService.FetchAll().Select(x => Mapper.Map<UserViewModel>(x)));
         }
 
         [HttpGet("{id}")]
-        [Produces(typeof(GroupViewModel))]
+        [Produces(typeof(UserViewModel))]
         public IActionResult Get(int id)
         {
-            var group = GroupService.GetById(id);
-            if (group == null)
+            var fetchedUser = UserService.GetById(id);
+            if (fetchedUser == null)
             {
                 return NotFound();
             }
 
-            return Ok(Mapper.Map<GroupViewModel>(group));
+            return Ok(Mapper.Map<UserViewModel>(fetchedUser));
         }
 
-        // POST api/group
+        // POST api/User
         [HttpPost]
-        [Produces(typeof(GroupViewModel))]
-        public IActionResult Post(GroupInputViewModel viewModel)
+        [Produces(typeof(UserViewModel))]
+        public IActionResult Post(UserInputViewModel viewModel)
         {
-            if (viewModel == null)
+            if (User == null)
             {
                 return BadRequest();
             }
-            var createdGroup = GroupService.AddGroup(Mapper.Map<Group>(viewModel));
-            return CreatedAtAction(nameof(Get), new { id = createdGroup.Id}, Mapper.Map<GroupViewModel>(createdGroup));
+
+            var createdUser = UserService.AddUser(Mapper.Map<User>(viewModel));
+
+            return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, Mapper.Map<UserViewModel>(createdUser));
         }
 
-        // PUT api/group/5
+        // PUT api/User/5
         [HttpPut]
-        public IActionResult Put(int id, GroupInputViewModel viewModel)
+        public IActionResult Put(int id, UserInputViewModel viewModel)
         {
             if (viewModel == null)
             {
                 return BadRequest();
             }
-            var group = GroupService.GetById(id);
-            if (group == null)
+            var fetchedUser = UserService.GetById(id);
+            if (fetchedUser == null)
             {
                 return NotFound();
             }
 
-            Mapper.Map(viewModel, group);
-            GroupService.UpdateGroup(group);
-
+            Mapper.Map(viewModel, fetchedUser);
+            UserService.UpdateUser(fetchedUser);
             return NoContent();
         }
 
-        // DELETE api/group/5
+        // DELETE api/User/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             if (id <= 0)
             {
-                return BadRequest("A group id must be specified");
+                return BadRequest("A User id must be specified");
             }
 
-            if (GroupService.DeleteGroup(id))
+            if (UserService.DeleteUser(id))
             {
                 return Ok();
             }

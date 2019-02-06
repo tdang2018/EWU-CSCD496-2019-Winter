@@ -14,12 +14,12 @@ namespace SecretSanta.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GiftController : ControllerBase
+    public class GiftsController : ControllerBase
     {
         private IGiftService GiftService { get; }
         private IMapper Mapper { get; }
 
-        public GiftController(IGiftService giftService, IMapper mapper)
+        public GiftsController(IGiftService giftService, IMapper mapper)
         {
             GiftService = giftService;
             Mapper = mapper;

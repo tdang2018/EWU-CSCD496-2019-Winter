@@ -39,7 +39,7 @@ namespace SecretSanta.Api.Tests.Controllers
                     gift
                 }
             };
-            var controller = new GiftController(testService, Mapper.Instance);
+            var controller = new GiftsController(testService, Mapper.Instance);
 
             var result = controller.GetGiftForUser(4) as OkObjectResult;
 
@@ -56,7 +56,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public void GetGiftForUser_RequiresPositiveUserId()
         {
             var testService = new TestableGiftService();
-            var controller = new GiftController(testService, Mapper.Instance);
+            var controller = new GiftsController(testService, Mapper.Instance);
 
             var result = controller.GetGiftForUser(-1) as NotFoundResult;
 

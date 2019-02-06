@@ -36,7 +36,7 @@ namespace SecretSanta.Api.Tests.Controllers
                 .Verifiable();
 
 
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
             var result = controller.Get() as OkObjectResult;
 
@@ -52,7 +52,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public void CreateGroup_RequiresGroup()
         {
             var service = new Mock<IGroupService>(MockBehavior.Strict);
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
 
             var result = controller.Post(null) as BadRequestResult;
@@ -76,9 +76,9 @@ namespace SecretSanta.Api.Tests.Controllers
                 })
                 .Verifiable();
 
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
-            var result = controller.Post(group) as OkObjectResult;
+            var result = controller.Post(group) as CreatedAtActionResult;
             var resultValue = result.Value as GroupViewModel;
 
             Assert.IsNotNull(resultValue);
@@ -91,7 +91,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public void UpdateGroup_RequiresGroup()
         {
             var service = new Mock<IGroupService>(MockBehavior.Strict);
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
 
             var result = controller.Put(1, null) as BadRequestResult;
@@ -107,9 +107,7 @@ namespace SecretSanta.Api.Tests.Controllers
                 Name = "Group"
             };
             var service = new Mock<IGroupService>();
-            service.Setup(x => x.UpdateGroup(It.Is<Group>(g =>
-                    g.Id == 2 &&
-                    g.Name == group.Name)))
+            service.Setup(x => x.GetById(2))
                 .Returns(new Group
                 {
                     Id = 2,
@@ -117,14 +115,11 @@ namespace SecretSanta.Api.Tests.Controllers
                 })
                 .Verifiable();
 
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
-            var result = controller.Put(2, group) as OkObjectResult;
-            var resultValue = result.Value as GroupViewModel;
+            var result = controller.Put(2, group) as NoContentResult;
 
-            Assert.IsNotNull(resultValue);
-            Assert.AreEqual(2, resultValue.Id);
-            Assert.AreEqual("Group", resultValue.Name);
+            Assert.IsNotNull(result);
             service.VerifyAll();
         }
 
@@ -134,7 +129,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public void DeleteGroup_RequiresPositiveId(int groupId)
         {
             var service = new Mock<IGroupService>(MockBehavior.Strict);
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
             var result = controller.Delete(groupId);
 
@@ -148,7 +143,7 @@ namespace SecretSanta.Api.Tests.Controllers
             service.Setup(x => x.DeleteGroup(2))
                 .Returns(false)
                 .Verifiable();
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
             var result = controller.Delete(2);
 
@@ -163,7 +158,7 @@ namespace SecretSanta.Api.Tests.Controllers
             service.Setup(x => x.DeleteGroup(2))
                 .Returns(true)
                 .Verifiable();
-            var controller = new GroupController(service.Object, Mapper.Instance);
+            var controller = new GroupsController(service.Object, Mapper.Instance);
 
             var result = controller.Delete(2);
 
