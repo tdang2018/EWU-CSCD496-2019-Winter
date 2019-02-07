@@ -69,8 +69,8 @@ namespace SecretSanta.Domain.Tests.Services
             }
         }
 
-        [TestMethod]
-        public void GetUsers_ReturnsUserInGroup()
+    /*    [TestMethod]
+     public void GetUsers_ReturnsUserInGroup()
         {
             var user = new User { Id = 42 };
             var group = new Group { Id = 43 };
@@ -91,7 +91,7 @@ namespace SecretSanta.Domain.Tests.Services
                 Assert.AreEqual(42, users.Single().Id);
             }
         }
-
+        */
         [TestMethod]
         public void GetUsers_ReturnsEmptySetWhenGroupIsNotFound()
         {

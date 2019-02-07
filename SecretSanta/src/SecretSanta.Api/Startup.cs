@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SecretSanta.Api.Models;
 using SecretSanta.Domain.Models;
 using SecretSanta.Domain.Services;
 using SecretSanta.Domain.Services.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
 
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace SecretSanta.Api
 {
     public class Startup
@@ -27,12 +30,20 @@ namespace SecretSanta.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<IGiftService, GiftService>();
-
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGroupService, GroupService>();
+            Mapper.Initialize(cfg => {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+            //Need to add automapper to your services
+            services.AddAutoMapper();
+           
+            // var connection = new SqliteConnection("DataSource=:memory:");
+            //  connection.Open();
             services.AddDbContext<ApplicationDbContext>(builder =>
             {
-                builder.UseSqlite(connection);
+                //   builder.UseSqlite(connection);
+                builder.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             // Register the Swagger generator, defining 1 or more Swagger documents
