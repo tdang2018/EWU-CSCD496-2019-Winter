@@ -27,7 +27,7 @@ namespace SecretSanta.Api.Controllers
         {
             if (groupId <= 0)
             {
-                return BadRequest();
+                return BadRequest("GroupId must be positive!");
             }
 
             var pairings = await PairingService.GenerateUserPairings(groupId);
