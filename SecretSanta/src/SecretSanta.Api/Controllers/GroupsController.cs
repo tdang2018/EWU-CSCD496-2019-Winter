@@ -27,14 +27,14 @@ namespace SecretSanta.Api.Controllers
 
         // GET api/group
         [HttpGet]
-        public async Task<ActionResult<ICollection<GroupViewModel>>> Get()
+        public async Task<ActionResult<ICollection<GroupViewModel>>> GetGroups()
         {
             var groups = await GroupService.FetchAll();
             return Ok(groups.Select(x => Mapper.Map<GroupViewModel>(x)));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GroupViewModel>> Get(int id)
+        public async Task<ActionResult<GroupViewModel>> GetGroup(int id)
         {
             var group = await GroupService.GetById(id);
             if (group == null)
@@ -47,19 +47,19 @@ namespace SecretSanta.Api.Controllers
 
         // POST api/group
         [HttpPost]
-        public async Task<ActionResult<GroupViewModel>> Post(GroupInputViewModel viewModel)
+        public async Task<ActionResult<GroupViewModel>> CreateGroup(GroupInputViewModel viewModel)
         {
             if (viewModel == null)
             {
                 return BadRequest();
             }
             var createdGroup = await GroupService.AddGroup(Mapper.Map<Group>(viewModel));
-            return CreatedAtAction(nameof(Get), new { id = createdGroup.Id}, Mapper.Map<GroupViewModel>(createdGroup));
+            return CreatedAtAction(nameof(GetGroup), new { id = createdGroup.Id}, Mapper.Map<GroupViewModel>(createdGroup));
         }
 
         // PUT api/group/5
         [HttpPut]
-        public async Task<ActionResult> Put(int id, GroupInputViewModel viewModel)
+        public async Task<ActionResult> UpdateGroup(int id, GroupInputViewModel viewModel)
         {
             if (viewModel == null)
             {
@@ -79,7 +79,7 @@ namespace SecretSanta.Api.Controllers
 
         // DELETE api/group/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteGroup(int id)
         {
             if (id <= 0)
             {
