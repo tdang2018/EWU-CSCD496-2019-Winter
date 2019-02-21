@@ -31,7 +31,7 @@ namespace SecretSanta.Api.Tests.Controllers
             var controller = new PairingController(service.Object, Mapper.Instance);
 
             IActionResult result = await controller.GenerateUserPairings(-1);
-            Assert.IsTrue(result is BadRequestObjectResult);
+            Assert.IsTrue(result is BadRequestObjectResult); 
         }
 
 
