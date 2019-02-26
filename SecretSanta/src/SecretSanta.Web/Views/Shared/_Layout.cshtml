@@ -6,7 +6,7 @@
     <title>@ViewBag.Title</title>
     <!-- Stylesheets -->
     
-    <link href="~/css/main.90005a4e529a622689a7.css" rel="stylesheet" />
+    <link href="~/css/main.9a44c361459d10aafc57.css" rel="stylesheet" />
     
     <!-- End Stylesheets -->
 </head>
@@ -20,10 +20,10 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item" asp-controller="Users">
+                <a class="navbar-item" asp-controller="Users" asp-action="Index">
                     Users
                 </a>
-                <a class="navbar-item">
+                <a class="navbar-item" asp-controller="Groups" asp-action="Index" >
                     Groups
                 </a>
             </div>
@@ -37,7 +37,7 @@
 
     <!-- Scripts -->
     
-    <script src="~/js/main.90005a4e529a622689a7.js"></script>
+    <script src="~/js/main.9a44c361459d10aafc57.js"></script>
     
     <!-- End Scripts -->
     @RenderSection("scripts", required: false)
