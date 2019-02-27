@@ -54,5 +54,63 @@ namespace SecretSanta.Web.Controllers
 
             return result;
         }
+
+        [HttpGet]
+        public IActionResult Edit(int userId)
+        {
+            ViewBag.UserId = userId;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserInputViewModel viewModel, int userId)        
+        {
+            IActionResult result = View();
+                          
+            if (ModelState.IsValid)
+            {
+                using (var httpClient = ClientFactory.CreateClient("SecretSantaApi"))
+                {
+                    try
+                    {
+                        var secretSantaClient = new SecretSantaClient(httpClient.BaseAddress.ToString(), httpClient);
+                        await secretSantaClient.UpdateUserAsync(userId,viewModel);
+
+                        result = RedirectToAction(nameof(Index));
+                    }
+                    catch (SwaggerException se)
+                    {
+                        ViewBag.ErrorMessage = se.Message;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "First name cannot be empty";
+            }
+
+            return result;
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            IActionResult result = View();
+            using (var httpClient = ClientFactory.CreateClient("SecretSantaApi"))
+            {
+                try
+                {
+                    var secretSantaClient = new SecretSantaClient(httpClient.BaseAddress.ToString(), httpClient);
+                    await secretSantaClient.DeleteUserAsync(id);
+
+                    result = RedirectToAction(nameof(Index));
+                }
+                catch (SwaggerException se)
+                {
+                    ModelState.AddModelError("", se.Message);
+                }
+            }
+
+            return result;
+        }
     }
 }
