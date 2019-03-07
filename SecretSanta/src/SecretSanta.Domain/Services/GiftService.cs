@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SecretSanta.Domain.Models;
+using SecretSanta.Domain.Services.Interfaces;
 
 namespace SecretSanta.Domain.Services
 {
-    public class GiftService
+    public class GiftService : IGiftService
     {
         private ApplicationDbContext DbContext { get; }
 
@@ -14,39 +17,47 @@ namespace SecretSanta.Domain.Services
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public Gift AddGiftToUser(int userId, Gift gift)
+        public async Task<Gift> AddGift(Gift gift)
         {
             if (gift == null) throw new ArgumentNullException(nameof(gift));
 
-            gift.UserId = userId;
             DbContext.Gifts.Add(gift);
-            DbContext.SaveChanges();
+            await DbContext.SaveChangesAsync();
 
             return gift;
         }
 
-        public Gift UpdateGiftForUser(int userId, Gift gift)
+        public async Task<Gift> GetGift(int giftId)
+        {
+            var retrievedGift = await DbContext.Gifts.SingleOrDefaultAsync(g => g.Id == giftId);
+
+            return retrievedGift;
+        }
+
+        public async Task<Gift> UpdateGift(Gift gift)
         {
             if (gift == null) throw new ArgumentNullException(nameof(gift));
 
-            gift.UserId = userId;
             DbContext.Gifts.Update(gift);
-            DbContext.SaveChanges();
+            await DbContext.SaveChangesAsync();
 
             return gift;
         }
 
-        public List<Gift> GetGiftsForUser(int userId)
+        public async Task<List<Gift>> GetGiftsForUser(int userId)
         {
-            return DbContext.Gifts.Where(g => g.UserId == userId).ToList();
+            return await DbContext.Gifts.Where(g => g.UserId == userId).ToListAsync();
         }
 
-        public void RemoveGift(Gift gift)
+        public async Task RemoveGift(int giftId)
         {
-            if (gift == null) throw new ArgumentNullException(nameof(gift));
+            var giftToDelete = await DbContext.Gifts.FindAsync(giftId);
 
-            DbContext.Gifts.Remove(gift);
-            DbContext.SaveChanges();
+            if (giftToDelete != null)
+            {
+                DbContext.Gifts.Remove(giftToDelete);
+                DbContext.SaveChanges();
+            }
         }
     }
 }
