@@ -35,8 +35,7 @@ namespace SecretSanta.Api
                 .MinimumLevel.Debug()
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.WithProperty("App Name", "SecretSanta.Api")
-                .WriteTo.SQLite(Configuration.GetConnectionString("LogConnection"))
-                .Enrich.WithProperty("App Name", "SecretSanta.Api")
+                .WriteTo.SQLite(Configuration.GetConnectionString("LogConnection"))              
                 .CreateLogger();
             try
             {
