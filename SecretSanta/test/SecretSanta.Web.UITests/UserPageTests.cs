@@ -31,7 +31,7 @@ namespace SecretSanta.Web.UITests
         }
 
         [TestMethod]
-        public void CanGetToUsersPage()
+        public void CanNavigateToUsersPage()
         {
             //Arrange
             Driver.Navigate().GoToUrl(RootUrl);

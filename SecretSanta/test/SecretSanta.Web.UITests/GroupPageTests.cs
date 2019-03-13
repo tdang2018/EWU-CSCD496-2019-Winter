@@ -32,7 +32,7 @@ namespace SecretSanta.Web.UITests
         }
 
         [TestMethod]
-        public void CanGetToGroupsPage()
+        public void CanNavigateToGroupsPage()
         {
             //Arrange
             Driver.Navigate().GoToUrl(RootUrl);
@@ -102,21 +102,5 @@ namespace SecretSanta.Web.UITests
             addGroupPage.SubmitButton.Click();
             return page;
         }
-    }
-
-    public class HomePage1
-    {
-        public IWebDriver Driver { get; }
-
-        public GroupsPage GroupPage => new GroupsPage(Driver);
-
-        //Id, LinkText, CssSelector/XPath
-        //public IWebElement GroupsLink => Driver.FindElement(By.CssSelector("a[href=\"/Groups\"]"));
-        public IWebElement GroupsLink => Driver.FindElement(By.LinkText("Groups"));
-
-        public HomePage1(IWebDriver driver)
-        {
-            Driver = driver ?? throw new ArgumentNullException(nameof(driver));
-        }
-    }   
+    }  
 }
