@@ -47,6 +47,17 @@ namespace SecretSanta.Web.UITests
             return deleteLinks.Single(x => x.GetAttribute("onclick").EndsWith($"{userName}?')"));
         }
 
+        public IWebElement GetEditLink(string userName)
+        {
+            ReadOnlyCollection<IWebElement> userElements =
+                Driver.FindElements(By.CssSelector("h1+ul>li"));
+
+            var userElement = userElements.Single(x => x.Text.StartsWith(userName));
+
+            return userElement.FindElement(By.CssSelector("a.button"));
+        }
+
+
         public UsersPage(IWebDriver driver)
         {
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));

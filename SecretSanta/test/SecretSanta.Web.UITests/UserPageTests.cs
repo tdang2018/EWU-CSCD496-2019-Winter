@@ -59,21 +59,18 @@ namespace SecretSanta.Web.UITests
             Assert.IsTrue(Driver.Url.EndsWith(AddUsersPage.Slug));
         }
 
-
         [TestMethod]
         public void CanAddUsers()
         {
             //Arrange /Act
             string userFirstName = "First Name" + Guid.NewGuid().ToString("N");
-            string userLastName = "Last Name" + Guid.NewGuid().ToString("N");
-            
-           // string userName = "FirstName "
+            string userLastName = "Last Name" + Guid.NewGuid().ToString("N");            
+           
             UsersPage page = CreateUser(userFirstName, userLastName);
 
             //Assert
             Assert.IsTrue(Driver.Url.EndsWith(UsersPage.Slug));
-            List<string> userNames = page.UserNames;
-            //Assert.IsTrue(userNames.Contains(userFirstName + " " + userLastName));
+            List<string> userNames = page.UserNames;            
             Assert.IsTrue(userNames.Contains($"{userFirstName} {userLastName}"));
         }
 
@@ -90,9 +87,59 @@ namespace SecretSanta.Web.UITests
             deleteLink.Click();
             Driver.SwitchTo().Alert().Accept();
             //Assert
-            List<string> userNames = page.UserNames;
-            // Assert.IsFalse(userNames.Contains(userFirstName + " " + userLastName));
+            List<string> userNames = page.UserNames;            
             Assert.IsFalse(userNames.Contains($"{userFirstName} {userLastName}"));
+        }
+
+        [TestMethod]
+        public void CanNavigateToEditUserPage()
+        {
+            //Arrange
+            var rootUri = new Uri(RootUrl);
+            Driver.Navigate().GoToUrl(new Uri(rootUri, UsersPage.Slug));
+            var page = new UsersPage(Driver);
+            page.AddUser.Click();
+            string userFirstName = "First Name" + Guid.NewGuid().ToString("N");
+            string userLastName = "Last Name" + Guid.NewGuid().ToString("N");
+
+            //Act
+            CreateUser(userFirstName, userLastName);
+
+            IWebElement editLink = page.GetEditLink($"{userFirstName} {userLastName}");
+            string linkText = editLink.GetAttribute("href");
+            string userID = (linkText.Substring(linkText.LastIndexOf("/") + 1));
+            var editPage = new EditUsersPage(Driver);
+
+            editLink.Click();
+
+            Assert.AreEqual<string>(userID, editPage.CurrentUserID);
+            Assert.AreEqual<string>(userFirstName, editPage.FirstNameTextBox.GetAttribute("value"));
+            Assert.AreEqual<string>(userLastName, editPage.LastNameTextBox.GetAttribute("value"));
+        }
+
+        [TestMethod]
+        public void CanEditUser()
+        {
+            //Arrange
+            string userFirstName = "First Name" + Guid.NewGuid().ToString("N");
+            string userLastName = "Last Name" + Guid.NewGuid().ToString("N");
+            var page = CreateUser(userFirstName, userLastName);
+            page.GetEditLink($"{userFirstName} {userLastName}").Click();
+            EditUsersPage editPage = new EditUsersPage(Driver);
+
+            //Act
+            editPage.FirstNameTextBox.Clear();
+            editPage.LastNameTextBox.Clear();
+            string newFirstName = "First Name" + Guid.NewGuid().ToString("N");
+            string newLastName = "Last Name" + Guid.NewGuid().ToString("N");
+            editPage.FirstNameTextBox.SendKeys(newFirstName);
+            editPage.LastNameTextBox.SendKeys(newLastName);
+            editPage.SubmitButton.Click();
+
+            //Assert
+            List<string> users = page.UserNames;
+            Assert.IsTrue(users.Contains($"{newFirstName} {newLastName}"));
+            Assert.IsFalse(users.Contains($"{userFirstName} {userLastName}"));
         }
 
         private UsersPage CreateUser(string userFirstName, string userLastName)
@@ -108,6 +155,7 @@ namespace SecretSanta.Web.UITests
             addUserPage.UserLastNameTextBox.SendKeys(userLastName);
             addUserPage.SubmitButton.Click();
             return page;
-        }
+        }     
+
     }
 }
