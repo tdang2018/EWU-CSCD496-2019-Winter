@@ -94,9 +94,9 @@ namespace SecretSanta.Web.UITests
         {
             //Arrange
             var rootUri = new Uri(RootUrl);
-            Driver.Navigate().GoToUrl(new Uri(rootUri, UsersPage.Slug));
-            var page = new UsersPage(Driver);
-            page.AddUser.Click();
+            Driver.Navigate().GoToUrl(new Uri(rootUri, GroupsPage.Slug));
+            var page = new GroupsPage(Driver);
+            page.AddGroup.Click();
             string groupName = "Group Name" + Guid.NewGuid().ToString("N");
             
             //Act

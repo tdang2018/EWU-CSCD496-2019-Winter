@@ -15,6 +15,8 @@ namespace SecretSanta.Web.UITests
 
         public IWebElement AddGroup => Driver.FindElement(By.LinkText("Add Group"));
 
+        public IWebElement EditButton => Driver.FindElement(By.LinkText("Edit"));
+
         public AddGroupsPage AddGroupsPage => new AddGroupsPage(Driver);
 
         public List<string> GroupNames
