@@ -45,6 +45,16 @@ namespace SecretSanta.Web.UITests
             return deleteLinks.Single(x => x.GetAttribute("onclick").EndsWith($"{groupName}?')"));
         }
 
+        public IWebElement GetEditLink(string groupName)
+        {
+            ReadOnlyCollection<IWebElement> groupElements =
+                Driver.FindElements(By.CssSelector("h1+ul>li"));
+
+            var groupElement = groupElements.Single(x => x.Text.StartsWith(groupName));
+
+            return groupElement.FindElement(By.CssSelector("a.button"));
+        }
+
         public GroupsPage(IWebDriver driver)
         {
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));

@@ -89,6 +89,53 @@ namespace SecretSanta.Web.UITests
             Assert.IsFalse(groupNames.Contains(groupName));
         }
 
+        [TestMethod]
+        public void CanNavigateToEditGroupPage()
+        {
+            //Arrange
+            var rootUri = new Uri(RootUrl);
+            Driver.Navigate().GoToUrl(new Uri(rootUri, UsersPage.Slug));
+            var page = new UsersPage(Driver);
+            page.AddUser.Click();
+            string groupName = "Group Name" + Guid.NewGuid().ToString("N");
+            
+            //Act
+            CreateGroup(groupName);
+
+            IWebElement editLink = page.GetEditLink($"{groupName}");
+            string linkText = editLink.GetAttribute("href");
+            string groupID = (linkText.Substring(linkText.LastIndexOf("/") + 1));
+            var editPage = new EditGroupsPage(Driver);
+
+            editLink.Click();
+
+            Assert.AreEqual<string>(groupID, editPage.CurrentGroupID);
+            Assert.AreEqual<string>(groupName, editPage.GroupNameTextBox.GetAttribute("value"));
+            
+        }
+
+        [TestMethod]
+        public void CanEditGroup()
+        {
+            //Arrange
+            string groupName = "Group Name" + Guid.NewGuid().ToString("N");
+            
+            var page = CreateGroup(groupName);
+            page.GetEditLink($"{groupName}").Click();
+            EditGroupsPage editPage = new EditGroupsPage(Driver);
+
+            //Act
+            editPage.GroupNameTextBox.Clear();            
+            string newGroupName = "Group Name" + Guid.NewGuid().ToString("N");
+            editPage.GroupNameTextBox.SendKeys(newGroupName);            
+            editPage.SubmitButton.Click();
+
+            //Assert
+            List<string> groups = page.GroupNames;
+            Assert.IsTrue(groups.Contains($"{newGroupName}"));
+            Assert.IsFalse(groups.Contains($"{groupName}"));
+        }
+
         private GroupsPage CreateGroup(string groupName)
         {
             var rootUri = new Uri(RootUrl);
