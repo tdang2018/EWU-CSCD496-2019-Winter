@@ -75,6 +75,21 @@ namespace SecretSanta.Web.UITests
         }
 
         [TestMethod]
+        public void CanAddUsersNoLastName()
+        {
+            //Arrange /Act
+            string userFirstName = "First Name" + Guid.NewGuid().ToString("N");
+            string userLastName = "";
+
+            UsersPage page = CreateUser(userFirstName, userLastName);
+
+            //Assert
+            Assert.IsTrue(Driver.Url.EndsWith(UsersPage.Slug));
+            List<string> userNames = page.UserNames;
+            Assert.IsTrue(userNames.Contains($"{userFirstName}"));
+        }
+
+        [TestMethod]
         public void CanDeleteUser()
         {
             //Arrange
